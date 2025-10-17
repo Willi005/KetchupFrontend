@@ -1,0 +1,57 @@
+.card-container {
+    font-family: "Barlow", sans-serif;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 192px;
+    height: 226px;
+    background-color: #1F1D2B;
+    border-radius: 12px;
+    box-sizing: border-box;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+
+}
+
+.card-container:hover {
+    transform: scale(1.02);
+}
+
+.card-image {
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: -34px;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    /*box-sizing: border-box; hace que el width
+       y height que defino para un elemento incluyan el padding y el border,
+        en lugar de sumarse a ellos.*/
+    flex-grow: 1;
+    padding: 16px 16px 26px 16px;
+}
+
+.card-name {
+    max-width: 132px;
+}
+
+.card-price {
+    margin-top: auto;
+    margin-bottom: 1px;
+    font-weight: 300;
+}
+
+.card-stock {
+    color: #ABBBC2;
+}
