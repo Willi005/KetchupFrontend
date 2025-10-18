@@ -1,0 +1,51 @@
+.food-icon-container {
+    display: flex;
+    width: 80px;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background-color: transparent;
+    border-radius: 8px;
+}
+
+.food-icon-frame {
+    display: flex;
+    width: 56px;
+    height: 56px;
+    background-color: transparent;
+    border-radius: 8px;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.food-icon {
+    width: 20px;
+    height: 20px;
+    color: #f56f6f;
+    transition: color 0.3s ease;
+}
+
+.food-icon-container:not(.active):hover .food-icon-frame {
+    background-color: #ff7272;
+    box-shadow: 0px 2px 14px 0px rgba(234, 124, 105, 0.29);
+}
+
+.food-icon-container:not(.active):hover .food-icon {
+    color: white;
+}
+
+.food-icon-container.active {
+    background-color: #252836;
+    transition: all 0.3s ease;
+}
+
+.food-icon-container.active .food-icon-frame {
+    background-color: #ff7272;
+    box-shadow: 0px 2px 14px 0px rgba(234, 124, 105, 0.29);
+}
+
+.food-icon-container.active .food-icon {
+    color: white;
+}
