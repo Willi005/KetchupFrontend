@@ -9,8 +9,8 @@
     background-color: #1F1D2B;
     box-sizing: border-box;
     align-items: center;
-    border-top-right-radius: 16px;
-    border-bottom-right-radius: 16px;
+    border-top-right-radius: 14px;
+    border-bottom-right-radius: 14px;
 
 }
 .sidebar-header{
@@ -32,6 +32,13 @@
     justify-content: center;
     align-items: center;
     transition: all 0.3s ease;
+    background-color: #F56F6FFF;
+}
+
+.sidebar-logo-img{
+    width: 83px;
+    height: 83px;
+    filter: invert(100%);
 }
 
 .sidebar-nav {
@@ -40,4 +47,11 @@
     align-items: center;
     width: 100%;
     gap: 40px;
+    flex-grow: 1;
+    padding-bottom: 35px;
+    box-sizing: border-box;
+}
+
+.sidebar-nav > *:last-child {
+    margin-top: auto;
 }
