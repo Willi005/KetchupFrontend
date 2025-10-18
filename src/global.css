@@ -3,13 +3,33 @@ html {
     font-size: 14px;
     color: white;
 }
+
 html, body {
     margin: 0;
     padding: 0;
     background-color: #252836;
-    height: 100vh;       /* Fija la altura de la app a la ventana */
-    overflow: hidden;    /* Esconde el scroll/bouncing del body */
+    height: 100vh;
+    overflow: hidden;
 }
-*{
+
+* {
     box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #2D303E;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #50525A;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f56f6f;
 }
