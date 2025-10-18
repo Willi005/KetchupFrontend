@@ -11,7 +11,7 @@ function SideBar() {
         <aside className={'sidebar-container'}>
             <div className={'sidebar-header'}>
             <div className={'sidebar-logo'}>
-                <img src={"src/icons/local-icon.png"} alt="Logo" class/>
+                <img src={"src/icons/logo.svg"} alt="Logo" class/>
             </div>
             </div>
 
@@ -32,7 +32,6 @@ function SideBar() {
                     onClick={() => setActiveItem('logout')}
                 />
             </nav>
-
         </aside>
     )
 }
