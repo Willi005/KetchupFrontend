@@ -1,0 +1,34 @@
+.categories-slider {
+    display: flex;
+    gap: 50px;
+    border-bottom: 1px solid #393C49;
+    width: 100%;
+}
+
+.category-tab {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding-bottom: 12px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+
+}
+
+.category-tab.active {
+    color: #f56f6f;
+    transform: translateY(-1px);
+}
+
+.category-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #f56f6f;
+    border-radius: 2px;
+}
