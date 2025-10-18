@@ -1,16 +1,28 @@
 import './App.css'
 import SideBar from "./component/SideBar/SideBar.jsx";
-import {FoodGrid} from "./component/FoodGrid/FoodGrid.jsx";
+import {HomePage} from "./pages/Home/HomePage.jsx";
+import {SettingsPage} from "./pages/Settings/SettingsPage.jsx";
+import {Route, Routes} from "react-router-dom";
+import {StatisticsPage} from "./pages/Statistics/StatisticsPage.jsx";
+import {NotifyPage} from "./pages/Notify/NotifyPage.jsx";
+import {NotificationsPage} from "./pages/Notifications/NotificationsPage.jsx";
 
 function App() {
 
     return (
-        <main>
-            <div className={'content-container'}>
-                <SideBar/>
-                <FoodGrid></FoodGrid>
-            </div>
-        </main>
+
+        <div className={'app-container'}>
+            <SideBar/>
+            <main className={'main-content'}>
+                <Routes>
+                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/statistics" element={<StatisticsPage/>}/>
+                    <Route path="/notify" element={<NotifyPage/>}/>
+                    <Route path="/notifications" element={<NotificationsPage/>}/>
+                    <Route path="/settings" element={<SettingsPage/>}/>
+                </Routes>
+            </main>
+        </div>
     );
 }
 

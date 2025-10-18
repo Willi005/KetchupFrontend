@@ -1,11 +1,12 @@
 import {SideBarIcon} from "../SideBarIcon/SideBarIcon.jsx";
 import './SideBar.css'
-import {useState} from "react";
-import {House, Gear,ProjectorScreenChart,EnvelopeSimple,BellSimple, SignOut} from "@phosphor-icons/react";
+import {Link, useLocation} from 'react-router-dom';
+import {House, Gear, ProjectorScreenChart, EnvelopeSimple, BellSimple, SignOut} from "@phosphor-icons/react";
 
 function SideBar() {
 
-    const [activeItem, setActiveItem] = useState('home');
+    const location = useLocation();
+    const currentPath = location.pathname;
 
     return (
         <aside className={'sidebar-container'}>
@@ -16,35 +17,46 @@ function SideBar() {
             </div>
 
             <nav className={'sidebar-nav'}>
-                <SideBarIcon
-                    icon={House}
-                    isActive={activeItem === 'home'}
-                    onClick={() => setActiveItem('home')}
-                />
-                <SideBarIcon
-                    icon={ProjectorScreenChart}
-                    isActive={activeItem === 'statistics'}
-                    onClick={() => setActiveItem('statistics')}
-                />
-                <SideBarIcon
-                    icon={EnvelopeSimple}
-                    isActive={activeItem === 'send-notification'}
-                    onClick={() => setActiveItem('send-notification')}
-                />
-                <SideBarIcon
-                    icon={BellSimple}
-                    isActive={activeItem === 'notifications'}
-                    onClick={() => setActiveItem('notifications')}
-                />
-                <SideBarIcon
-                    icon={Gear}
-                    isActive={activeItem === 'settings'}
-                    onClick={() => setActiveItem('settings')}
-                />
+
+                <Link to="/">
+                    <SideBarIcon
+                        icon={House}
+                        isActive={currentPath === '/'}
+                    />
+                </Link>
+
+                <Link to="/statistics">
+                    <SideBarIcon
+                        icon={ProjectorScreenChart}
+                        isActive={currentPath === '/statistics'}
+                    />
+                </Link>
+
+                <Link to="/notify">
+                    <SideBarIcon
+                        icon={EnvelopeSimple}
+                        isActive={currentPath === '/notify'}
+                    />
+                </Link>
+
+                <Link to="/notifications">
+                    <SideBarIcon
+                        icon={BellSimple}
+                        isActive={currentPath === '/notifications'}
+                    />
+                </Link>
+
+                <Link to="/settings">
+                    <SideBarIcon
+                        icon={Gear}
+                        isActive={currentPath === '/settings'}
+                    />
+                </Link>
+
                 <SideBarIcon
                     icon={SignOut}
                     isActive={false}
-                    onClick={() =>{
+                    onClick={() => {
                         console.log('Sign out clicked'); //TODO implement sign out
                     }}
                 />

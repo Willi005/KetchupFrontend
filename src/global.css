@@ -2,7 +2,14 @@ html {
     font-family: "Barlow", sans-serif;
     font-size: 14px;
     color: white;
-    background-color: #252836;
+}
+html, body {
     margin: 0;
     padding: 0;
+    background-color: #252836;
+    height: 100vh;       /* Fija la altura de la app a la ventana */
+    overflow: hidden;    /* Esconde el scroll/bouncing del body */
+}
+*{
+    box-sizing: border-box;
 }
