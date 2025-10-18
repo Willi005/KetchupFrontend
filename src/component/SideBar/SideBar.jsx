@@ -25,10 +25,10 @@ function SideBar() {
                     />
                 </Link>
 
-                <Link to="/statistics">
+                <Link to="/dashboard">
                     <SideBarIcon
                         icon={ProjectorScreenChart}
-                        isActive={currentPath === '/statistics'}
+                        isActive={currentPath === '/dashboard'}
                     />
                 </Link>
 
