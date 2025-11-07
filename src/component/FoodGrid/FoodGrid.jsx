@@ -1,18 +1,7 @@
-import {useEffect, useState} from "react";
-import {getProducts} from "../../service/getProducts.js";
-import {FoodCard} from "../FoodCard/FoodCard.jsx";
+import { FoodCard } from "../FoodCard/FoodCard.jsx";
 import './FoodGrid.css'
 
-export function FoodGrid() {
-
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-        getProducts().then(data => {
-            setProducts(data);
-        })
-    }, []);
-
+export function FoodGrid({ products }) {
     return (
         <div className={'food-grid'}>
             {
@@ -22,29 +11,7 @@ export function FoodGrid() {
                               price={product.price}
                               category={product.category}
                               stock={product.stock}
-                              imgUrl={product.imageUrl}
-                    />
-                ))
-            }
-            { //pormientrasnomas
-                products.map(product => (
-                    <FoodCard key={product.id}
-                              name={product.name}
-                              price={product.price}
-                              category={product.category}
-                              stock={product.stock}
-                              imgUrl={product.imageUrl}
-                    />
-                ))
-            }
-            { //pormientrasnomas
-                products.map(product => (
-                    <FoodCard key={product.id}
-                              name={product.name}
-                              price={product.price}
-                              category={product.category}
-                              stock={product.stock}
-                              imgUrl={product.imageUrl}
+                              imgUrl={product.image}
                     />
                 ))
             }

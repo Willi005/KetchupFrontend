@@ -15,6 +15,7 @@
 
 .card-container:hover {
     transform: scale(1.02);
+    border: 1px #e0e0e0 solid;
 }
 
 .card-image {
