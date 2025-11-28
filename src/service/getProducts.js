@@ -1,7 +1,14 @@
+import axios from "axios";
 const API_URL = 'http://localhost:8080/foods';
 
+
 export async function getProducts() {
-    const response = await fetch(API_URL);
-    const data = await response.json();
-    return data;
+    try {
+        const response = await axios.get(API_URL);
+        return response.data;
+    }catch(error) {
+        console.error("Error fetching foods: ",error.message);
+
+        throw error;
+    }
 }

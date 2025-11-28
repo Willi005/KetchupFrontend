@@ -1,13 +1,13 @@
 import './FoodCard.css'
 
-export function FoodCard({name, price, category, stock, imgUrl}) {
+export function FoodCard({name, price, category, stock, imgUrl, onClick}) {
 
     const formattedCategory = category.charAt(0)
         .toUpperCase() + category.slice(1).toLowerCase();
 
     return (
         <>
-            <div className={'card-container'}>
+            <div className={'card-container'} onClick={onClick}>
                 <img className={'card-image'} src={imgUrl} alt="World Classic"/>
                 <div className={'card-info'}>
                     <span className={'card-name'}>{name}</span>

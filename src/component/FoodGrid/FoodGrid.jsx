@@ -1,7 +1,7 @@
 import { FoodCard } from "../FoodCard/FoodCard.jsx";
 import './FoodGrid.css'
 
-export function FoodGrid({ products }) {
+export function FoodGrid({ products, onAddToCart }) {
     return (
         <div className={'food-grid'}>
             {
@@ -12,6 +12,7 @@ export function FoodGrid({ products }) {
                               category={product.category}
                               stock={product.stock}
                               imgUrl={product.image}
+                              onClick={() => onAddToCart(product)}
                     />
                 ))
             }

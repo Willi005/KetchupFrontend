@@ -4,10 +4,11 @@
     display: flex;
     width: 100%;
     height: 100vh;
+    overflow-x: hidden; /* Evita el scroll horizontal */
 }
 
 .homepage-main-area {
-    flex: 1;
+    flex: 1; /* Ocupa todo el espacio disponible */
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -22,8 +23,11 @@
     overflow-y: auto;
     padding: 55px 24px 24px 24px;
     box-sizing: border-box;
+    max-width: 1430px;
 }
 
+/* --- ELIMINA ESTE BLOQUE DE TU CSS --- */
+/*
 .homepage-order-panel-wrapper {
     width: 380px;
     height: 100vh;
@@ -31,4 +35,58 @@
     background-color: #1F1D2B;
     padding: 24px;
     box-sizing: border-box;
+}
+*/
+
+/* --- AÑADE ESTOS NUEVOS ESTILOS --- */
+
+/* 1. Backdrop (Fondo oscuro) */
+.backdrop-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 50% negro */
+
+    /* z-index: Detrás del panel (100), delante de la grilla (0) */
+    z-index: 50;
+
+    /* Oculto por defecto */
+    opacity: 0;
+    visibility: hidden;
+
+    /* Animación */
+    transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.backdrop-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 2. Contenedor Deslizante (El truco principal) */
+.sliding-panel-container {
+    position: fixed; /* Fijo a la pantalla */
+    top: 0;
+    right: 0;
+    height: 100vh;
+    display: flex; /* Paneles lado a lado */
+
+    /* Ancho total (380px del carrito + 380px del pago) */
+    width: 760px;
+
+    /* z-index: Por encima de todo */
+    z-index: 100;
+
+    /* Animación */
+    transition: transform 0.35s ease-in-out;
+
+    /* Estado por defecto: movido a la derecha para ocultar el panel de pago */
+    transform: translateX(380px);
+}
+
+/* Estado abierto: se mueve a la izquierda para mostrar ambos paneles */
+.sliding-panel-container.is-open {
+    transform: translateX(0);
 }

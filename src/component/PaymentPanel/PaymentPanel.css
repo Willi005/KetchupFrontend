@@ -1,0 +1,109 @@
+/* ruta: src/component/PaymentPanel/PaymentPanel.css */
+
+/* 1. El contenedor principal es ahora mucho más simple */
+.payment-panel {
+    /* --- CAMBIOS CLAVE --- */
+    width: 380px; /* Ancho fijo */
+    height: 100vh; /* Alto completo */
+    flex-shrink: 0; /* Evita que se encoja */
+    /* --- FIN CAMBIOS --- */
+
+    background-color: #1F1D2B; /* Tu color de fondo */
+    color: #fff;
+    border-left: 1px solid #4a4a4a; /* Borde de separación */
+}
+
+/* 2. El 'inner' sigue teniendo el padding y scroll */
+.payment-panel-inner {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* 3. El resto de los estilos del formulario no cambian */
+.payment-title {
+    margin: 0 0 5px 0;
+    font-size: 1.8em;
+}
+.payment-subtitle {
+    margin: 0 0 24px 0;
+    color: #aaa;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #4a4a4a;
+    border-radius: 8px;
+    background-color: #2d303e;
+    color: #fff;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.payment-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 24px;
+}
+
+/* Re-usamos las clases de OrderPanel.css para consistencia */
+.btn-primary {
+    width: 100%;
+    padding: 16px;
+    background-color: #ea7c69;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-primary:disabled {
+    background-color: #ccc;
+}
+
+.btn-secondary {
+    flex: 1;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    background-color: transparent;
+    color: #ea7c69;
+    border: 1px solid #ea7c69;
+}
+
+.error-message {
+    color: #ea7c69;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 10px;
+}
