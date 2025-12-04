@@ -68,10 +68,9 @@ export function OrderPanel() {
 
             alert(`Order created successfully! Ticket #${response.data.ticketNumber}`);
 
-            // --- NUEVO: Abrir ticket en nueva pestaña para imprimir ---
+            // Imprimir usando la nueva función silenciosa
             const orderId = response.data.id;
             printTicket(orderId);
-            // --------------------------------------------------------
 
             clearCart();
             setClientName('');
@@ -87,29 +86,44 @@ export function OrderPanel() {
         }
     };
 
-    // Función auxiliar para descargar y abrir el PDF
+    // Función auxiliar para imprimir sin abrir nueva pestaña (Silent Print iframe)
     const printTicket = async (orderId) => {
         try {
             const response = await axios.get(`http://localhost:8080/orders/${orderId}/ticket`, {
                 headers: { 'Authorization': `Bearer ${token}` },
-                responseType: 'blob' // Importante para recibir el PDF correctamente
+                responseType: 'blob'
             });
 
-            // Crear una URL temporal para el archivo PDF
+            // 1. Crear URL del Blob PDF
             const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
             const pdfUrl = window.URL.createObjectURL(pdfBlob);
 
-            // Abrir en nueva ventana e imprimir automáticamente
-            const printWindow = window.open(pdfUrl, '_blank');
-            if (printWindow) {
-                // Pequeño timeout para asegurar que cargue antes de lanzar print
-                printWindow.onload = () => {
-                    setTimeout(() => printWindow.print(), 500);
-                };
-            }
+            // 2. Crear un iframe invisible
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none'; // Totalmente oculto
+            iframe.src = pdfUrl;
+
+            // 3. Agregarlo al DOM para que cargue
+            document.body.appendChild(iframe);
+
+            // 4. Esperar a que cargue y lanzar impresión
+            iframe.onload = () => {
+                setTimeout(() => {
+                    // Foco necesario para algunos navegadores antes de imprimir
+                    iframe.contentWindow.focus();
+                    iframe.contentWindow.print();
+
+                    // 5. Limpieza (Retirar iframe y URL después de uso)
+                    setTimeout(() => {
+                        document.body.removeChild(iframe);
+                        window.URL.revokeObjectURL(pdfUrl);
+                    }, 10000); // 10s es seguro para que el usuario interactúe con el diálogo
+                }, 500);
+            };
+
         } catch (error) {
             console.error("Error imprimiendo ticket:", error);
-            alert("Orden guardada, pero no se pudo generar el ticket.");
+            alert("Orden guardada. Si el ticket no se imprime, revise los permisos.");
         }
     };
 
