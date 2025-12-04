@@ -205,7 +205,7 @@ export function OrderPanel() {
                             <span className="label">Change</span>
                             {/* Lógica para mostrar '$ 0' si está vacío, o '$ ---' si falta dinero */}
                             <span className={`value ${(amountPaid && change < 0) ? 'error-txt' : ''}`}>
-                                $ {amountPaid ? (change >= 0 ? change : '---') : '0'}
+                                $ {amountPaid ? (change >= 0 ? change : '-') : '0'}
                             </span>
                         </div>
                         {change < 0 && amountPaid && <p className="error-txt">Insufficient mount</p>}
