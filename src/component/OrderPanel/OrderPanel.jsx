@@ -9,48 +9,39 @@ export function OrderPanel() {
     const { cartItems, cartTotal, addToCart, decreaseQuantity, removeFromCart, clearCart } = useCart();
     const { user, token } = useAuth();
 
-    // Estado del formulario
     const [clientName, setClientName] = useState('');
     const [paymentType, setPaymentType] = useState('CASH');
     const [amountPaid, setAmountPaid] = useState('');
     const [kitchenNotes, setKitchenNotes] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // --- NUEVO: Estado para el número de ticket ---
     const [nextTicketNumber, setNextTicketNumber] = useState(0);
 
-    // Función para obtener el número de orden actual
     const fetchNextOrderNumber = async () => {
         try {
             const response = await axios.get('http://localhost:8080/orders', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            // La lógica es: Total de ordenes en BD + 1
             setNextTicketNumber(response.data.length + 1);
         } catch (error) {
             console.error("Error fetching orders count:", error);
         }
     };
 
-    // Cargar el número al montar el componente
     useEffect(() => {
-        if (token) {
+        if(token) {
             fetchNextOrderNumber();
         }
     }, [token]);
 
-    // Formatear el número (ej: 9 -> #00009)
-    const formattedTicket = `#${nextTicketNumber.toString().padStart(5, '0')}`;
-    // ----------------------------------------------
-
-    // Cálculo del vuelto
     const change = (parseFloat(amountPaid) || 0) - cartTotal;
     const isCashPayment = paymentType === 'CASH';
 
-    // Validación para habilitar botón
     const isValid = cartItems.length > 0 &&
         clientName.trim() !== '' &&
         (!isCashPayment || (isCashPayment && change >= 0));
+
+    const formattedTicket = `#${nextTicketNumber.toString().padStart(5, '0')}`;
 
     const handleOrderSubmit = async () => {
         if (!isValid) return;
@@ -72,21 +63,20 @@ export function OrderPanel() {
             };
 
             const response = await axios.post('http://localhost:8080/orders', payload, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
-            // Éxito
-            alert(`Orden creada! Ticket #${response.data.ticketNumber}`);
+            alert(`Order created successfully! Ticket #${response.data.ticketNumber}`);
 
-            // Limpieza del panel
+            // --- NUEVO: Abrir ticket en nueva pestaña para imprimir ---
+            const orderId = response.data.id;
+            printTicket(orderId);
+            // --------------------------------------------------------
+
             clearCart();
             setClientName('');
             setAmountPaid('');
             setKitchenNotes('');
-
-            // Actualizamos el número para la siguiente orden inmediatamente
             setNextTicketNumber(prev => prev + 1);
 
         } catch (error) {
@@ -97,11 +87,36 @@ export function OrderPanel() {
         }
     };
 
+    // Función auxiliar para descargar y abrir el PDF
+    const printTicket = async (orderId) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/orders/${orderId}/ticket`, {
+                headers: { 'Authorization': `Bearer ${token}` },
+                responseType: 'blob' // Importante para recibir el PDF correctamente
+            });
+
+            // Crear una URL temporal para el archivo PDF
+            const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+            const pdfUrl = window.URL.createObjectURL(pdfBlob);
+
+            // Abrir en nueva ventana e imprimir automáticamente
+            const printWindow = window.open(pdfUrl, '_blank');
+            if (printWindow) {
+                // Pequeño timeout para asegurar que cargue antes de lanzar print
+                printWindow.onload = () => {
+                    setTimeout(() => printWindow.print(), 500);
+                };
+            }
+        } catch (error) {
+            console.error("Error imprimiendo ticket:", error);
+            alert("Orden guardada, pero no se pudo generar el ticket.");
+        }
+    };
+
     if (cartItems.length === 0) {
         return (
             <div className="order-panel">
-                {/* Título dinámico también en estado vacío */}
-                <h2 className="order-title">New order</h2>
+                <h2 className="order-title">New Order</h2>
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ABBBC2', gap: '20px'}}>
                     <p>Add products to get started</p>
                 </div>
@@ -111,7 +126,6 @@ export function OrderPanel() {
 
     return (
         <div className="order-panel">
-            {/* Título dinámico */}
             <h2 className="order-title">Order number {formattedTicket}</h2>
 
             <div className="order-items-list">
@@ -121,7 +135,7 @@ export function OrderPanel() {
 
                         <div className="item-details">
                             <span className="item-name">{item.name}</span>
-                            <span className="item-price">$ {item.price} per unit</span>
+                            <span className="item-price">$ {item.price} Per unit</span>
                             <div className="item-qty-control">
                                 <button className="qty-btn" onClick={() => decreaseQuantity(item.id)}>-</button>
                                 <span className="qty-value">{item.quantity}</span>
@@ -129,10 +143,10 @@ export function OrderPanel() {
                             </div>
                         </div>
 
-                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'5px', justifyContent: 'center'}}>
+                        <div className="item-actions">
                             <span className="item-total-price">$ {item.price * item.quantity}</span>
                             <button
-                                style={{background:'none', border:'none', color:'#f56f6f', cursor:'pointer'}}
+                                style={{background:'none', border:'none', color:'#f56f6f', cursor:'pointer', padding: 0}}
                                 onClick={() => removeFromCart(item.id)}
                             >
                                 <Trash size={18} />
@@ -156,6 +170,7 @@ export function OrderPanel() {
                     type="text"
                     placeholder="Kitchen notes"
                     className="panel-input"
+                    style={{fontSize: '14px'}}
                     value={kitchenNotes}
                     onChange={(e) => setKitchenNotes(e.target.value)}
                 />
@@ -166,7 +181,7 @@ export function OrderPanel() {
                 </div>
 
                 <div>
-                    <p className="label" style={{marginBottom:'8px', fontSize:'12px'}}>Payment Method</p>
+                    <p className="label" style={{marginBottom:'8px', fontSize:'12px'}}>Payment method</p>
                     <div className="payment-options">
                         <button
                             className={`payment-btn ${paymentType === 'CASH' ? 'active' : ''}`}
@@ -196,14 +211,14 @@ export function OrderPanel() {
                     <div className="cash-info-box">
                         <input
                             type="number"
-                            placeholder="Cash Received"
+                            placeholder="Cash received"
                             className="panel-input"
                             value={amountPaid}
                             onChange={(e) => setAmountPaid(e.target.value)}
+                            onKeyDown={(evt) => ["e", "E", "+", "-"].includes(evt.key) && evt.preventDefault()}
                         />
                         <div className="footer-row">
                             <span className="label">Change</span>
-                            {/* Lógica para mostrar '$ 0' si está vacío, o '$ ---' si falta dinero */}
                             <span className={`value ${(amountPaid && change < 0) ? 'error-txt' : ''}`}>
                                 $ {amountPaid ? (change >= 0 ? change : '-') : '0'}
                             </span>
