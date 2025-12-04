@@ -6,12 +6,14 @@ export function FoodGrid({ products }) {
         <div className={'food-grid'}>
             {
                 products.map(product => (
-                    <FoodCard key={product.id}
-                              name={product.name}
-                              price={product.price}
-                              category={product.category}
-                              stock={product.stock}
-                              imgUrl={product.image}
+                    <FoodCard
+                        key={product.id}
+                        id={product.id} // IMPORTANTE: Pasamos el ID explícitamente
+                        name={product.name}
+                        price={product.price}
+                        category={product.category}
+                        stock={product.stock}
+                        imgUrl={product.image}
                     />
                 ))
             }

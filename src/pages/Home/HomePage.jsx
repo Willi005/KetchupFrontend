@@ -7,14 +7,26 @@ import { useProducts } from "../../hooks/useProducts.js";
 
 export function HomePage() {
 
-    const { products, setCategory, activeCategory, isLoading } = useProducts();
+    // 1. Extraemos las propiedades de búsqueda del hook useProducts
+    const {
+        products,
+        setCategory,
+        activeCategory,
+        isLoading,
+        searchQuery,     // <--- Estado del texto
+        setSearchQuery   // <--- Función para actualizarlo
+    } = useProducts();
 
     return (
         <div className="homepage-layout">
             <div className="homepage-main-area">
                 <div className="homepage-header-container">
-                    <HomeHeader/>
-                    {/* 1. Pasamos los valores del hook a los componentes hijos */}
+                    {/* 2. Se las pasamos al HomeHeader */}
+                    <HomeHeader
+                        searchQuery={searchQuery}
+                        onSearch={setSearchQuery}
+                    />
+
                     <CategoriesSlider
                         activeCategory={activeCategory}
                         onSelectCategory={setCategory}
@@ -22,9 +34,8 @@ export function HomePage() {
                 </div>
 
                 <main className="homepage-content-scroller">
-                    {/* 2. Manejamos el estado de carga (la buena práctica) */}
                     {isLoading
-                        ? <p>Cargando productos...</p>
+                        ? <p style={{padding: '24px'}}>Cargando productos...</p>
                         : <FoodGrid products={products} />
                     }
                 </main>

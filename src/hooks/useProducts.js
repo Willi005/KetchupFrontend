@@ -9,6 +9,9 @@ export function useProducts() {
     // Estado para el criterio de filtro (la categoría seleccionada)
     const [activeCategory, setActiveCategory] = useState('All food');
 
+    // Nuevo: Estado para la búsqueda de texto
+    const [searchQuery, setSearchQuery] = useState('');
+
     // Estado de carga (buena práctica :3)
     const [isLoading, setIsLoading] = useState(true);
 
@@ -26,19 +29,33 @@ export function useProducts() {
             });
     }, []);
 
-    // Este useMemo recalcula la lista !!solo!! si 'allProducts' o 'activeCategory' cambian.
+    // Este useMemo recalcula la lista si 'allProducts', 'activeCategory' o 'searchQuery' cambian.
     const filteredProducts = useMemo(() => {
-        if (activeCategory === 'All food') {
-            return allProducts;
+        let result = allProducts;
+
+        // 1. Filtro por Categoría
+        if (activeCategory !== 'All food') {
+            result = result.filter(product => product.category === activeCategory);
         }
-        return allProducts.filter(product => product.category === activeCategory);
-    }, [allProducts, activeCategory]); // Dependencias
+
+        // 2. Filtro por Texto (Búsqueda) - Insensible a mayúsculas/minúsculas
+        if (searchQuery.trim() !== '') {
+            const query = searchQuery.toLowerCase();
+            result = result.filter(product =>
+                product.name.toLowerCase().includes(query)
+            );
+        }
+
+        return result;
+    }, [allProducts, activeCategory, searchQuery]); // Dependencias actualizadas
 
     // Finalmente se devuelve toodo lo que un componente pueda necesitar
     return {
         products: filteredProducts,  // La lista ya filtrada
-        setCategory: setActiveCategory, // La función para cambiar el filtro
-        activeCategory: activeCategory, // El filtro actual (para el slider)
+        setCategory: setActiveCategory, // La función para cambiar el filtro de categoría
+        activeCategory: activeCategory, // El filtro actual de categoría
+        setSearchQuery: setSearchQuery, // Función para actualizar la búsqueda
+        searchQuery: searchQuery,       // El texto de búsqueda actual
         isLoading: isLoading        // El estado de carga
     };
 }
