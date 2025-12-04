@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import axios from 'axios';
 import { Trash, CreditCard, Money, Wallet } from "@phosphor-icons/react";
 
-export function OrderPanel() {
+export function OrderPanel({ onOrderSuccess }) {
     const { cartItems, cartTotal, addToCart, decreaseQuantity, removeFromCart, clearCart } = useCart();
     const { user, token } = useAuth();
 
@@ -77,6 +77,10 @@ export function OrderPanel() {
             setAmountPaid('');
             setKitchenNotes('');
             setNextTicketNumber(prev => prev + 1);
+
+            if (onOrderSuccess) {
+                onOrderSuccess();
+            }
 
         } catch (error) {
             console.error("Error creating order:", error);

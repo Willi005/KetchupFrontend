@@ -13,8 +13,9 @@ export function HomePage() {
         setCategory,
         activeCategory,
         isLoading,
-        searchQuery,     // <--- Estado del texto
-        setSearchQuery   // <--- Función para actualizarlo
+        searchQuery,
+        setSearchQuery,
+        refreshProducts
     } = useProducts();
 
     return (
@@ -42,7 +43,7 @@ export function HomePage() {
             </div>
 
             <aside className="homepage-order-panel-wrapper">
-                <OrderPanel/>
+                <OrderPanel onOrderSuccess={refreshProducts} />
             </aside>
         </div>
     )

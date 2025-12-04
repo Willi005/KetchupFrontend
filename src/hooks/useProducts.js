@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { getProducts } from '../service/getProducts.js';
 
 export function useProducts() {
@@ -15,7 +15,7 @@ export function useProducts() {
     // Estado de carga (buena práctica :3)
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
+    const refreshProducts = useCallback(() => {
         setIsLoading(true);
         getProducts()
             .then(data => {
@@ -28,6 +28,10 @@ export function useProducts() {
                 setIsLoading(false);
             });
     }, []);
+
+    useEffect(() => {
+        refreshProducts();
+    }, [refreshProducts]);
 
     // Este useMemo recalcula la lista si 'allProducts', 'activeCategory' o 'searchQuery' cambian.
     const filteredProducts = useMemo(() => {
@@ -47,7 +51,7 @@ export function useProducts() {
         }
 
         return result;
-    }, [allProducts, activeCategory, searchQuery]); // Dependencias actualizadas
+    }, [allProducts, activeCategory, searchQuery]);
 
     // Finalmente se devuelve toodo lo que un componente pueda necesitar
     return {
@@ -56,6 +60,7 @@ export function useProducts() {
         activeCategory: activeCategory, // El filtro actual de categoría
         setSearchQuery: setSearchQuery, // Función para actualizar la búsqueda
         searchQuery: searchQuery,       // El texto de búsqueda actual
-        isLoading: isLoading        // El estado de carga
+        isLoading: isLoading,        // El estado de carga
+        refreshProducts
     };
 }
