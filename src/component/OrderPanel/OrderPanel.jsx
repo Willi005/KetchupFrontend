@@ -70,9 +70,8 @@ export function OrderPanel() {
     if (cartItems.length === 0) {
         return (
             <div className="order-panel">
-                <h2 className="order-title">New Order</h2>
+                <h2 className="order-title">Nueva Orden</h2>
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ABBBC2', gap: '20px'}}>
-                    <img src="/src/icons/logo-new.svg" style={{width: '80px', opacity: 0.5}} alt="Empty"/>
                     <p>Agrega productos para comenzar</p>
                 </div>
             </div>
@@ -81,7 +80,7 @@ export function OrderPanel() {
 
     return (
         <div className="order-panel">
-            <h2 className="order-title">Current Order</h2>
+            <h2 className="order-title">Orden Actual</h2>
 
             {/* Lista de Items */}
             <div className="order-items-list">
@@ -131,7 +130,6 @@ export function OrderPanel() {
                     type="text"
                     placeholder="Notas para cocina..."
                     className="panel-input"
-                    style={{fontSize: '12px'}}
                     value={kitchenNotes}
                     onChange={(e) => setKitchenNotes(e.target.value)}
                 />

@@ -22,7 +22,7 @@ export function FoodCard({id, name, price, category, stock, imgUrl}) {
             <div className={'card-info'}>
                 <span className={'card-name'}>{name}</span>
                 <span className={'card-price'}>$ {price}</span>
-                <span className={'card-stock'}>{`${stock} ${formattedCategory}s available`}</span>
+                <span className={'card-stock'}>{`${stock} ${formattedCategory}s disponibles`}</span>
             </div>
         </div>
     )

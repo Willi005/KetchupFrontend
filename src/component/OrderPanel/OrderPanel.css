@@ -15,16 +15,22 @@
     flex: 1;
     overflow-y: auto;
     margin-bottom: 20px;
-    padding-right: 5px; /* Espacio para scrollbar */
+    padding-right: 10px;
 }
 
-/* Estilos de Item Individual */
+/* --- ITEM INDIVIDUAL --- */
 .order-item {
     display: grid;
-    grid-template-columns: 45px 1fr 40px; /* Imagen | Info | Precio */
-    gap: 10px;
-    margin-bottom: 24px;
-    align-items: center;
+    grid-template-columns: 45px 1fr auto;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #2D303E;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
 }
 
 .item-image {
@@ -46,7 +52,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 140px;
+    max-width: 130px;
 }
 
 .item-price {
@@ -74,6 +80,7 @@
     justify-content: center;
     font-size: 16px;
     line-height: 1;
+    transition: all 0.2s;
 }
 
 .qty-btn:hover {
@@ -81,24 +88,21 @@
     border-color: #f56f6f;
 }
 
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+}
+
 .item-total-price {
     font-weight: 600;
     text-align: right;
+    white-space: nowrap;
 }
 
-.item-input-notes {
-    grid-column: 1 / -1;
-    background: #2D303E;
-    border: 1px solid #393C49;
-    color: #E0E6E9;
-    border-radius: 4px;
-    padding: 8px;
-    font-size: 12px;
-    margin-top: 5px;
-    width: 100%;
-}
-
-/* Footer Section */
+/* --- FOOTER --- */
 .order-footer {
     border-top: 1px solid #393C49;
     padding-top: 20px;
@@ -122,7 +126,6 @@
     font-weight: 600;
 }
 
-/* Inputs y Botones */
 .panel-input {
     background-color: #2D303E;
     border: 1px solid #393C49;
@@ -132,6 +135,19 @@
     width: 100%;
     outline: none;
     font-family: inherit;
+}
+
+/* --- NUEVO: Ocultar flechas (spin buttons) en inputs numéricos --- */
+/* Chrome, Safari, Edge, Opera */
+.panel-input::-webkit-outer-spin-button,
+.panel-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+.panel-input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .panel-input:focus {
@@ -160,7 +176,7 @@
 }
 
 .payment-btn.active {
-    background-color: rgba(245, 111, 111, 0.15); /* Color suave */
+    background-color: rgba(245, 111, 111, 0.15);
     border-color: #f56f6f;
     color: white;
 }

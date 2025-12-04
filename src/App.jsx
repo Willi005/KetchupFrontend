@@ -7,7 +7,9 @@ import { DashboardPage } from "./pages/Dashboard/DashboardPage.jsx";
 import { NotifyPage } from "./pages/Notify/NotifyPage.jsx";
 import { NotificationsPage } from "./pages/Notifications/NotificationsPage.jsx";
 import { LoginPage } from "./pages/Login/LoginPage.jsx";
+// Importamos ambos contextos
 import { AuthProvider, useAuth } from "./context/AuthContext.jsx";
+import { CartProvider } from "./context/CartContext.jsx";
 
 // Componente para proteger rutas
 function ProtectedRoute({ children }) {
@@ -19,14 +21,13 @@ function ProtectedRoute({ children }) {
     }
 
     if (!isAuthenticated) {
-        // Redirigir al login, pero guardando la ubicación intento para volver después
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
     return children;
 }
 
-// Layout principal que incluye el Sidebar (solo para usuarios logueados)
+// Layout con Sidebar
 function MainLayout({ children }) {
     return (
         <div className={'app-container'}>
@@ -41,10 +42,8 @@ function MainLayout({ children }) {
 function AppContent() {
     return (
         <Routes>
-            {/* Ruta Pública: Login */}
             <Route path="/login" element={<LoginPage />} />
 
-            {/* Rutas Privadas: Requieren Auth y usan el Layout con Sidebar */}
             <Route path="/" element={
                 <ProtectedRoute>
                     <MainLayout>
@@ -85,7 +84,6 @@ function AppContent() {
                 </ProtectedRoute>
             } />
 
-            {/* Redirección por defecto */}
             <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
     );
@@ -93,8 +91,13 @@ function AppContent() {
 
 function App() {
     return (
+        // ORDEN IMPORTANTE DE PROVEEDORES:
+        // AuthProvider envuelve todo para manejar el usuario.
+        // CartProvider va dentro para que el carrito esté disponible en toda la app.
         <AuthProvider>
-            <AppContent />
+            <CartProvider>
+                <AppContent />
+            </CartProvider>
         </AuthProvider>
     );
 }
