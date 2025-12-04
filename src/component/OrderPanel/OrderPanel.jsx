@@ -11,10 +11,37 @@ export function OrderPanel() {
 
     // Estado del formulario
     const [clientName, setClientName] = useState('');
-    const [paymentType, setPaymentType] = useState('CASH'); // CASH, DEBIT_CARD, CREDIT_CARD
+    const [paymentType, setPaymentType] = useState('CASH');
     const [amountPaid, setAmountPaid] = useState('');
     const [kitchenNotes, setKitchenNotes] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // --- NUEVO: Estado para el número de ticket ---
+    const [nextTicketNumber, setNextTicketNumber] = useState(0);
+
+    // Función para obtener el número de orden actual
+    const fetchNextOrderNumber = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/orders', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            // La lógica es: Total de ordenes en BD + 1
+            setNextTicketNumber(response.data.length + 1);
+        } catch (error) {
+            console.error("Error fetching orders count:", error);
+        }
+    };
+
+    // Cargar el número al montar el componente
+    useEffect(() => {
+        if (token) {
+            fetchNextOrderNumber();
+        }
+    }, [token]);
+
+    // Formatear el número (ej: 9 -> #00009)
+    const formattedTicket = `#${nextTicketNumber.toString().padStart(5, '0')}`;
+    // ----------------------------------------------
 
     // Cálculo del vuelto
     const change = (parseFloat(amountPaid) || 0) - cartTotal;
@@ -30,7 +57,6 @@ export function OrderPanel() {
         setIsSubmitting(true);
 
         try {
-            // Construir el Payload según OrderRequestDto del backend
             const payload = {
                 employeeId: user.id,
                 clientName: clientName,
@@ -40,7 +66,6 @@ export function OrderPanel() {
                 })),
                 payment: {
                     type: paymentType,
-                    // Si no es efectivo, asumimos pago exacto (amountPaid = total)
                     amountPaid: isCashPayment ? parseFloat(amountPaid) : cartTotal
                 },
                 kitchenNotes: kitchenNotes
@@ -54,10 +79,15 @@ export function OrderPanel() {
 
             // Éxito
             alert(`Orden creada! Ticket #${response.data.ticketNumber}`);
+
+            // Limpieza del panel
             clearCart();
             setClientName('');
             setAmountPaid('');
             setKitchenNotes('');
+
+            // Actualizamos el número para la siguiente orden inmediatamente
+            setNextTicketNumber(prev => prev + 1);
 
         } catch (error) {
             console.error("Error creating order:", error);
@@ -70,9 +100,10 @@ export function OrderPanel() {
     if (cartItems.length === 0) {
         return (
             <div className="order-panel">
-                <h2 className="order-title">Nueva Orden</h2>
+                {/* Título dinámico también en estado vacío */}
+                <h2 className="order-title">New order</h2>
                 <div style={{flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#ABBBC2', gap: '20px'}}>
-                    <p>Agrega productos para comenzar</p>
+                    <p>Add products to get started</p>
                 </div>
             </div>
         );
@@ -80,9 +111,9 @@ export function OrderPanel() {
 
     return (
         <div className="order-panel">
-            <h2 className="order-title">Orden Actual</h2>
+            {/* Título dinámico */}
+            <h2 className="order-title">Order number {formattedTicket}</h2>
 
-            {/* Lista de Items */}
             <div className="order-items-list">
                 {cartItems.map((item) => (
                     <div className="order-item" key={item.id}>
@@ -90,15 +121,15 @@ export function OrderPanel() {
 
                         <div className="item-details">
                             <span className="item-name">{item.name}</span>
-                            <span className="item-price">$ {item.price}</span>
+                            <span className="item-price">$ {item.price} per unit</span>
                             <div className="item-qty-control">
                                 <button className="qty-btn" onClick={() => decreaseQuantity(item.id)}>-</button>
-                                <span>{item.quantity}</span>
+                                <span className="qty-value">{item.quantity}</span>
                                 <button className="qty-btn" onClick={() => addToCart(item)}>+</button>
                             </div>
                         </div>
 
-                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'5px'}}>
+                        <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end', gap:'5px', justifyContent: 'center'}}>
                             <span className="item-total-price">$ {item.price * item.quantity}</span>
                             <button
                                 style={{background:'none', border:'none', color:'#f56f6f', cursor:'pointer'}}
@@ -107,28 +138,23 @@ export function OrderPanel() {
                                 <Trash size={18} />
                             </button>
                         </div>
-
-                        {/* Nota por item: Podríamos implementarlo en el futuro, por ahora dejamos una nota global */}
                     </div>
                 ))}
             </div>
 
-            {/* Footer con Formulario */}
             <div className="order-footer">
 
-                {/* Cliente */}
                 <input
                     type="text"
-                    placeholder="Nombre del Cliente"
+                    placeholder="Customer name"
                     className="panel-input"
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                 />
 
-                {/* Notas Cocina */}
                 <input
                     type="text"
-                    placeholder="Notas para cocina..."
+                    placeholder="Kitchen notes"
                     className="panel-input"
                     value={kitchenNotes}
                     onChange={(e) => setKitchenNotes(e.target.value)}
@@ -139,51 +165,50 @@ export function OrderPanel() {
                     <span className="value">$ {cartTotal}</span>
                 </div>
 
-                {/* Selección de Pago */}
                 <div>
-                    <p className="label" style={{marginBottom:'8px', fontSize:'12px'}}>Método de Pago</p>
+                    <p className="label" style={{marginBottom:'8px', fontSize:'12px'}}>Payment Method</p>
                     <div className="payment-options">
                         <button
                             className={`payment-btn ${paymentType === 'CASH' ? 'active' : ''}`}
                             onClick={() => setPaymentType('CASH')}
                         >
                             <Money size={24} />
-                            Efectivo
+                            Cash
                         </button>
                         <button
                             className={`payment-btn ${paymentType === 'DEBIT_CARD' ? 'active' : ''}`}
                             onClick={() => setPaymentType('DEBIT_CARD')}
                         >
                             <Wallet size={24} />
-                            Débito
+                            Debit
                         </button>
                         <button
                             className={`payment-btn ${paymentType === 'CREDIT_CARD' ? 'active' : ''}`}
                             onClick={() => setPaymentType('CREDIT_CARD')}
                         >
                             <CreditCard size={24} />
-                            Crédito
+                            Credit
                         </button>
                     </div>
                 </div>
 
-                {/* Lógica Específica de Efectivo */}
                 {isCashPayment && (
                     <div className="cash-info-box">
                         <input
                             type="number"
-                            placeholder="Efectivo Recibido"
+                            placeholder="Cash Received"
                             className="panel-input"
                             value={amountPaid}
                             onChange={(e) => setAmountPaid(e.target.value)}
                         />
                         <div className="footer-row">
-                            <span className="label">Vuelto</span>
-                            <span className={`value ${change < 0 ? 'error-txt' : ''}`}>
-                                $ {change >= 0 ? change : '---'}
+                            <span className="label">Change</span>
+                            {/* Lógica para mostrar '$ 0' si está vacío, o '$ ---' si falta dinero */}
+                            <span className={`value ${(amountPaid && change < 0) ? 'error-txt' : ''}`}>
+                                $ {amountPaid ? (change >= 0 ? change : '---') : '0'}
                             </span>
                         </div>
-                        {change < 0 && amountPaid && <p className="error-txt">Monto insuficiente</p>}
+                        {change < 0 && amountPaid && <p className="error-txt">Insufficient mount</p>}
                     </div>
                 )}
 
@@ -192,7 +217,7 @@ export function OrderPanel() {
                     onClick={handleOrderSubmit}
                     disabled={!isValid || isSubmitting}
                 >
-                    {isSubmitting ? 'Procesando...' : `Cobrar $ ${cartTotal}`}
+                    {isSubmitting ? 'Processing...' : `Charge $ ${cartTotal}`}
                 </button>
             </div>
         </div>

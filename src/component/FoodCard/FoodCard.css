@@ -11,6 +11,11 @@
     transition: transform 0.5s ease;
     cursor: pointer;
 
+    /* FIX: Evita que se seleccione el texto al hacer muchos clics */
+    user-select: none;
+    -webkit-user-select: none; /* Para Safari/Chrome */
+    -moz-user-select: none;    /* Para Firefox */
+    -ms-user-select: none;     /* Para IE/Edge legacy */
 }
 
 .card-container:hover {
@@ -35,9 +40,6 @@
     color: white;
     width: 100%;
     box-sizing: border-box;
-    /*box-sizing: border-box; hace que el width
-       y height que defino para un elemento incluyan el padding y el border,
-        en lugar de sumarse a ellos.*/
     flex-grow: 1;
     padding: 16px 16px 26px 16px;
 }

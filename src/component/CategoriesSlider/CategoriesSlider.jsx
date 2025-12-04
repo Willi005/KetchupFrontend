@@ -1,13 +1,13 @@
 import './CategoriesSlider.css';
 
 const categories = [
-    { display: 'Todo',   value: 'All food' },
-    { display: 'Hamburguesa', value: 'BURGER' },
+    { display: 'All food',   value: 'All food' },
+    { display: 'Hamburguer', value: 'BURGER' },
     { display: 'Hot dog',    value: 'HOTDOG' },
     { display: 'Pizza',    value: 'PIZZA' },
-    { display: 'Frituras',      value: 'FRIE' },
-    { display: 'Postres',    value: 'DESSERT' },
-    { display: 'Bebidas',     value: 'DRINK' }
+    { display: 'Fries',      value: 'FRIE' },
+    { display: 'Dessert',    value: 'DESSERT' },
+    { display: 'Drink',     value: 'DRINK' }
 ];
 
 export function CategoriesSlider({ activeCategory, onSelectCategory }) {

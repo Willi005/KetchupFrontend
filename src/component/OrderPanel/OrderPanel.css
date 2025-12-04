@@ -18,7 +18,6 @@
     padding-right: 10px;
 }
 
-/* --- ITEM INDIVIDUAL --- */
 .order-item {
     display: grid;
     grid-template-columns: 45px 1fr auto;
@@ -67,6 +66,15 @@
     margin-top: 4px;
 }
 
+/* --- FIX: Espacio fijo para el número --- */
+.qty-value {
+    width: 24px; /* Ancho fijo igual al de los botones o similar */
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-block; /* Necesario para que el width funcione en un span */
+}
+
 .qty-btn {
     background-color: #2D303E;
     border: 1px solid #393C49;
@@ -81,6 +89,7 @@
     font-size: 16px;
     line-height: 1;
     transition: all 0.2s;
+    flex-shrink: 0; /* Evita que los botones se aplasten */
 }
 
 .qty-btn:hover {
@@ -102,7 +111,7 @@
     white-space: nowrap;
 }
 
-/* --- FOOTER --- */
+/* Footer Section */
 .order-footer {
     border-top: 1px solid #393C49;
     padding-top: 20px;
@@ -137,15 +146,12 @@
     font-family: inherit;
 }
 
-/* --- NUEVO: Ocultar flechas (spin buttons) en inputs numéricos --- */
-/* Chrome, Safari, Edge, Opera */
 .panel-input::-webkit-outer-spin-button,
 .panel-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-/* Firefox */
 .panel-input[type=number] {
     -moz-appearance: textfield;
 }
